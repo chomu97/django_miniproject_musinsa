@@ -1,0 +1,112 @@
+<script>
+const btnGroup = document.getElementById('newbtn2')
+function createBase(){
+    var menu = document.createElement("div")
+    menu.className = "btn-group"
+    btnGroup.append(menu)
+
+    var button = document.createElement("button")
+    button.className = "btn btn-secondary dropdown-toggle"
+    button.type = "button"
+    button.setAttribute("data-bs-toggle","dropdown")  
+    button.setAttribute("aria-expanded","false") 
+    var input = document.createElement("input")
+    input.className = "btn btn-secondary"
+    input.type = "text"
+    button.append(input)
+    return [menu, button];
+}
+
+function createColorList(idx){
+    var result = createBase()
+    var menu = result[0]
+    var button = result[1] 
+    button.childNodes[0].value = "색상을 선택하세요"  
+    button.childNodes[0].name = "selected_color"
+    menu.appendChild(button)
+
+    var ul = document.createElement("ul")
+    ul.className = "dropdown-menu"
+    appendListTag(ul, '모든 색상', idx)
+    {% for color in colors %}
+    appendListTag(ul, '{{color.name}}', idx)
+    {%endfor%}
+    menu.append(ul)
+}
+function changeText(btn,a){
+    btn.childNodes[0].value = a.innerText
+}
+function appendListTag(ulist, text, idx){
+    var li = document.createElement("li")
+    var a = document.createElement("a")
+    a.className = "dropdown-item"
+    a.innerText = text
+    a.parentbtn = document.getElementsByClassName("btn dropdown-toggle")[idx]
+    a.setAttribute("onClick","changeText(this.parentbtn,this)")   
+    li.appendChild(a)
+    ulist.appendChild(li)
+    return a
+}
+function createMainCategoryList(idx){
+    var result = createBase()
+    var menu = result[0]
+    var button = result[1]
+    button.childNodes[0].value = "대분류를 선택하세요"  
+    button.childNodes[0].name = "selected_main_category"
+    menu.appendChild(button)
+
+    var ul = document.createElement("ul")
+    ul.className = "dropdown-menu"
+    appendListTag(ul, '모든 대분류', idx)
+    {% for mc in main_categories %}
+    var a = appendListTag(ul, '{{mc.0}}', idx)
+    {%endfor%}
+    menu.append(ul)
+}
+function createCategoryList(idx, mainCategory){
+    var result = createBase()
+    var menu = result[0]
+    var button = result[1]
+    button.childNodes[0].value = "중분류를 선택하세요"
+    button.childNodes[0].name = "selected_category"
+    menu.appendChild(button)
+    var ul = document.createElement("ul")
+    ul.className = "dropdown-menu"
+    appendListTag(ul, '모든 중분류', idx)
+    menu.append(ul)
+}
+function changeCategoryList(mainbtn,categoryul){
+    categoryul.innerHTML=""
+    appendListTag(categoryul, '모든 중분류', 1)
+    {% for category in categories %}
+    if (mainbtn.childNodes[0].value == '{{category.mainCategory}}'){
+        var a = appendListTag(categoryul, '{{category.name}}', 1)
+    }
+    {%endfor%}
+    
+}
+function createSuccessBtn(){
+    var p = document.createElement("p")
+    btnGroup.append(p)
+    var button = document.createElement("button")
+    button.className = "btn btn-success"
+    button.type = "submit"
+    button.innerText = "확인하기!" 
+    p.append(button)
+}
+createMainCategoryList(0)
+btnGroup.append(document.createElement("br"))
+btnGroup.append(document.createElement("br"))
+createCategoryList(1)
+btnGroup.append(document.createElement("br"))
+btnGroup.append(document.createElement("br"))
+createColorList(2)
+btnGroup.append(document.createElement("br"))
+btnGroup.append(document.createElement("br"))
+var mainul = document.getElementsByClassName("dropdown-menu")[0]
+for (let li of mainul.childNodes){
+    li.childNodes[0].categoryul = document.getElementsByClassName("dropdown-menu")[1]
+    li.childNodes[0].setAttribute("onclick","changeText(this.parentbtn,this);changeCategoryList(this.parentbtn,this.categoryul);")
+}
+createSuccessBtn()
+</script>

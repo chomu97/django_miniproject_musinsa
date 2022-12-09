@@ -1,0 +1,63 @@
+{% extends "partials/base.html" %}
+{%load static%}
+
+{%block content%}
+<!-- Header-->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">CHANSINSA</h1>
+            <p class="lead fw-normal text-white-50 mb-0">이 상품 어떠세요?</p>
+        </div>
+    </div>
+</header>
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            {%for d,dc in data%}
+            <div class="col mb-5">
+                <div class="card h-100">
+                    {%if dc != 0 %}
+                    <!-- Sale badge-->
+                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">{{dc}}% Sale</div>
+                    {%endif%}
+                    <!-- Product image-->
+                    <img class="card-img-top" src="{{d.thumbnailUrl}}" height="300px"/>
+                    <!-- Product details-->
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                            <!-- Product name-->
+                            <h5 class="fw-bolder text-truncate">{{d.name}}</h5>
+                            <p class="fs-6">{{d.brand}}</p>
+                            <!-- Product reviews-->
+                            <div class="d-flex justify-content-center small text-warning mb-2">
+                                <div style="color:#aaa9a9; width: max-content; position: relative;">
+                                    <div style="color:#f98221;width:{{d.starRate}}%; padding: 0;position: absolute;display: flex;top: 0;left: 0;overflow: hidden;">
+                                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                                    </div>
+                                    <div style="padding: 0;">
+                                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                                    </div>
+                                </div>
+                                &nbsp;&nbsp;<div style="color:#f98221;">리뷰 : {{d.reviewCount}}</div>
+                            </div>
+                            <!-- Product price-->
+                            {%if dc != 0 %}
+                            <span class="text-muted text-decoration-line-through">\{{d.originalPrice}}</span>
+                            &nbsp;&nbsp;\{{d.sellingPrice}}
+                            {%else%}
+                            \{{d.originalPrice}}
+                            {%endif%}
+                        </div>
+                    </div>
+                    <!-- Product actions-->
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{{d.url}}">Buy</a></div>
+                    </div>
+                </div>
+            </div>
+            {%endfor%}
+        </div>
+    </div>
+</section>
+{%endblock content%}

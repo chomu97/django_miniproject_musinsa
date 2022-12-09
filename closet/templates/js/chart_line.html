@@ -1,0 +1,65 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.0.1/dist/chart.umd.min.js"></script>
+<script>
+  const ctx = document.getElementById("myChart1");
+  const bgColors = ['rgba(255, 99, 132, 0.2)','rgba(54, 162, 235, 0.2)','rgba(45, 183, 87, 0.2)']
+  const borderColors = ['rgb(255, 99, 132)','rgb(54, 162, 235)','rgb(45, 183, 87)']
+  const data = {
+  labels: [
+    '판매가 순위',
+    '할인율 순위',
+    '별점 순위',
+    '리뷰수 순위',
+  ],
+  datasets: [
+    {%for cloth,order,bgc,bc in clothes%}
+    {
+      label: '{{cloth.name}}',
+      data: [
+        {{order.0}},
+        {{order.1}},
+        {{order.2}},
+        {{order.3}},
+      ],
+      fill: false,
+      backgroundColor: '{{bgc}}',
+      borderColor: '{{bc}}',
+      pointBackgroundColor: '{{bc}}',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: '{{bc}}'
+    },
+    {%endfor%}
+    ]
+  };
+  const config = {
+    type: 'line',
+    data: data,
+    options: {
+      elements: {
+        line: {
+          borderWidth: 3
+        }
+      },
+      tooltips:{
+        mode: 'index'
+      },
+      hover:{
+        mode: 'index'
+      },
+      scales:{
+        y:{
+          min:0,
+          max:6,
+          ticks:{
+            stepSize:1
+          },
+          title:{
+            display:true,
+            text:"순위",
+          }
+        }
+      }
+    },
+  };
+  new Chart(ctx,config)
+</script>
