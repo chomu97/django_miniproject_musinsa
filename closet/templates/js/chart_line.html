@@ -11,7 +11,7 @@
     '리뷰수 순위',
   ],
   datasets: [
-    {%for cloth,order,bgc,bc in clothes%}
+    {%for cloth,order,bgc,bc in clothes_chart%}
     {
       label: '{{cloth.name}}',
       data: [
@@ -50,6 +50,7 @@
         y:{
           min:0,
           max:6,
+          beginAtZero:true,
           ticks:{
             stepSize:1
           },
@@ -61,5 +62,5 @@
       }
     },
   };
-  new Chart(ctx,config)
+  const a = new Chart(ctx,config)
 </script>

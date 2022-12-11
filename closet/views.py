@@ -20,10 +20,24 @@ def show_dashboard(request):
         selected_main_category = request.POST.get('selected_main_category')
         selected_color = request.POST.get('selected_color')
         selected_category = request.POST.get('selected_category')
+        # all query 기능 구현 필요.
+        if "모든" in selected_main_category or "선택" in selected_main_category:
+            selected_main_category = Category.objects.all().values_list('mainCategory').distinct()
+        else:
+            selected_main_category = Category.objects.filter(mainCategory__iexact=selected_main_category).values_list('mainCategory').distinct()
+        if "모든" in selected_category or "선택" in selected_category:
+            selected_category = Category.objects.all().values_list('name').distinct()
+        else:
+            selected_category = Category.objects.filter(name__iexact=selected_category).values_list('name').distinct()
+        if "모든" in selected_color or "선택" in selected_color:
+            selected_color = Color.objects.all().values_list('name').distinct()
+        else:
+            selected_color = Color.objects.filter(name__iexact=selected_color).values_list('name').distinct()
+        
         categoryFilter = Category.objects\
-            .filter(mainCategory__iexact=selected_main_category)\
-                .filter(name__iexact=selected_category).values_list('id')
-        colorFilter = Color.objects.filter(name__iexact=selected_color).values_list('id')
+            .filter(mainCategory__in=selected_main_category)\
+                .filter(name__in=selected_category).values_list('id')
+        colorFilter = Color.objects.filter(name__in=selected_color).values_list('id')
         filter_option = {
             "categoryId__in":categoryFilter,
             "colorId__in":colorFilter
@@ -46,11 +60,11 @@ def show_dashboard(request):
     backgroundColor = ['rgba(255, 99, 132, 0.2)','rgba(54, 162, 235, 0.2)','rgba(45, 183, 87, 0.2)','rgba(255, 193, 7, 0.2)','rgba(153, 102, 255,0.2)']
     borderColor = ['rgb(255, 99, 132)','rgb(54, 162, 235)','rgb(45, 183, 87)','rgb(255, 193, 7)','rgb(153, 102, 255)']
     data ={
-        "clothes":zip(clothes,order_list,backgroundColor,borderColor),
+        "clothes_chart":zip(clothes,order_list,backgroundColor,borderColor),
         "categories":categories,
         "colors":colors,
         "main_categories":main_categories,
-        "clothes_order":order_list,
+        "clothes":zip(clothes, ["#ff638433","#36a2eb33","#2db75733","#ffc10733","#9966ff33"]),
     }
     return render(request, 'closet/dashboard.html', data)
 
