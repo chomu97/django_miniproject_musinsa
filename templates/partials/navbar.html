@@ -5,10 +5,21 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
+        <div class="navbar-nav" id="myNavbar">
           <a class="nav-link active" aria-current="page" href="/">Home</a>
           <a class="nav-link" href="/closet/dashboard/">DashBoard</a>
         </div>
       </div>
     </div>
 </nav>
+<script>
+  var btnContainer = document.getElementById("myNavbar")
+  var btns = btnContainer.getElementsByClassName("nav-link")
+  if (document.URL.includes("main")){
+    btns[1].className = btns[1].className.replace(" active", "");
+    btns[0].className += " active";
+  } else{
+    btns[0].className = btns[0].className.replace(" active", "");
+    btns[1].className += " active";
+  }
+</script>
